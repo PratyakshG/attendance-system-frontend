@@ -16,6 +16,9 @@ import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AttendanceLoadingSkeleton } from "../../../components/LoadingSkeleton";
+import { Image, ImageKitProvider } from "@imagekit/next";
+
+const urlEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT;
 
 const EmployeeListPage = () => {
   const { loading, employees, setLoading, fetchEmployees } =
@@ -87,7 +90,16 @@ const EmployeeListPage = () => {
                 />
 
                 <div className="flex flex-col items-center relative">
-                  <div className="h-16 w-16 bg-neutral-400 rounded-md shrink-0 justify-self-center" />
+                  <ImageKitProvider urlEndpoint={urlEndpoint}>
+                    <Image
+                      src={"/default-image.jpg?updatedAt=1775541502645"}
+                      width={64}
+                      height={64}
+                      alt="Picture of the author"
+                      className="h-16 w-16 bg-neutral-400 rounded-md shrink-0 justify-self-center object-cover"
+                    />
+                  </ImageKitProvider>
+
                   <span
                     className={`text-[10px] px-2 py-0.5 rounded-full font-semibold w-fit h-fit absolute -bottom-2 left-1/2 -translate-x-1/2 ${
                       employee.isActive

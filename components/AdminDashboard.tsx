@@ -1,6 +1,21 @@
 import React from "react";
-import { Check, Clock, User, X } from "lucide-react";
+import {
+  Calendar,
+  Check,
+  Clock,
+  FilePen,
+  LucideMessageCircleX,
+  MailWarning,
+  Megaphone,
+  User,
+  X,
+} from "lucide-react";
 import { format } from "date-fns";
+import { FaUsers } from "react-icons/fa";
+import { IoAirplaneOutline } from "react-icons/io5";
+import { IoIosCalendar } from "react-icons/io";
+import Link from "next/link";
+import { TbCalendarX } from "react-icons/tb";
 
 const AdminDashboard = async () => {
   const fetchData = async () => {
@@ -28,24 +43,30 @@ const AdminDashboard = async () => {
   };
 
   const data = await fetchData();
-
-  console.log(data.pendingLeaves);
+  const notices = data.notices.filter(
+    (item: Notice) => new Date(item.createdAt) > new Date(),
+  );
 
   return (
     <>
       {/* Highlights */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5 items-start">
-        <div className="flex items-center rounded-xl px-3 lg:px-5 py-3 gap-3 bg-indigo-100">
+        <Link
+          href="/admin/employee-list"
+          className="flex items-center rounded-xl px-3 lg:px-5 py-3 gap-3 bg-indigo-100"
+        >
           <span>
-            <User className="bg-white p-1.5 lg:p-2.5 rounded-full size-8 lg:size-12 text-indigo-800" />
+            <FaUsers className="bg-white p-1.5 lg:p-2.5 rounded-full size-8 lg:size-12 text-indigo-800" />
           </span>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-1">
             <span className="font-bold text-2xl leading-none">
               {data?.stats.totalEmployees}
             </span>
-            <span className="text-xs lg:text-sm">Total Employees</span>
+            <span className="text-xs lg:text-sm font-medium">
+              Total Employees
+            </span>
           </div>
-        </div>
+        </Link>
 
         <div className="flex items-center rounded-xl px-3 lg:px-5 py-3 gap-3 bg-green-100">
           <span>
@@ -87,14 +108,29 @@ const AdminDashboard = async () => {
       <div className="max-lg:pb-5 flex flex-col lg:flex-row items-start justify-center h-full gap-5 *:border *:rounded-xl *:w-full *:h-full">
         {/* Notice Board */}
         <div>
-          <div className="px-5 py-4 border-b w-full">
-            <span className="font-medium text-lg">Notice Board</span>
+          <div className="flex items-center justify-between px-5 py-4 border-b">
+            <div className="flex items-center gap-2">
+              <Megaphone className="size-4" />
+              <span className="font-semibold">Notice Board</span>
+            </div>
+
+            <Link
+              href="/admin/notice-board"
+              className="text-xs border rounded px-2 py-1 font-medium hover:bg-neutral-100"
+            >
+              View all
+            </Link>
           </div>
 
           <div className="px-5 py-3 overflow-y-auto flex flex-col gap-3">
-            {data?.notices.length === 0 && <div>No Notices</div>}
+            {notices.length === 0 && (
+              <div className="flex flex-col items-center justify-center gap-2 py-10 lg:py-20">
+                <Megaphone className="size-32 bg-teal-500/10 p-6 rounded-full overflow-visible text-teal-600" />
+                <div className="font-medium mt-3">No New Notices</div>
+              </div>
+            )}
 
-            {data?.notices.map((item: Notice, index: number) => (
+            {notices.map((item: Notice, index: number) => (
               <div
                 key={index}
                 className={`p-4 rounded-md bg-neutral-100 relative`}
@@ -106,7 +142,10 @@ const AdminDashboard = async () => {
                     {item.priority}
                   </span>
 
-                  <span>{format(item.createdAt, "dd MMM, yyyy")}</span>
+                  <span className="flex items-center gap-1">
+                    <span>{format(item.createdAt, "dd MMM, yyyy")}</span>
+                    <IoIosCalendar />
+                  </span>
                 </p>
                 <p className="font-bold text-lg mb-1">{item.title}</p>
                 <p className="text-sm whitespace-pre-line bg-white p-2 rounded-md border">
@@ -119,13 +158,28 @@ const AdminDashboard = async () => {
 
         {/* Leave Applications */}
         <div>
-          <div className="px-5 py-4 border-b w-full">
-            <span className="font-medium text-lg">Leave Applications</span>
+          <div className="flex items-center justify-between px-5 py-4 border-b">
+            <div className="flex items-center gap-2">
+              <IoAirplaneOutline className="size-4 -rotate-45" />
+              <span className="font-semibold">Leave Applications</span>
+            </div>
+
+            <Link
+              href="/admin/leave-applications"
+              className="text-xs border rounded px-2 py-1 font-medium hover:bg-neutral-100"
+            >
+              View all
+            </Link>
           </div>
 
           <div className="px-5 py-3 overflow-y-auto flex flex-col gap-3">
             {data?.pendingLeaves.length === 0 && (
-              <div>No Pending Leave Applications</div>
+              <div className="flex flex-col items-center justify-center gap-2 py-10 lg:py-20">
+                <TbCalendarX className="size-32 bg-teal-500/10 p-6 rounded-full overflow-visible text-teal-600" />
+                <div className="font-medium mt-3">
+                  No Pending Leave Applications
+                </div>
+              </div>
             )}
 
             {data?.pendingLeaves.map((item: Leave, index: number) => (
@@ -146,8 +200,18 @@ const AdminDashboard = async () => {
 
         {/* Complaints */}
         <div>
-          <div className="px-5 py-4 border-b w-full">
-            <span className="font-medium text-lg">Complaints Board</span>
+          <div className="flex items-center justify-between px-5 py-4 border-b">
+            <div className="flex items-center gap-2">
+              <MailWarning className="size-4" />
+              <span className="font-semibold">Complaints Board</span>
+            </div>
+
+            <Link
+              href="/admin/complaints"
+              className="text-xs border rounded px-2 py-1 font-medium hover:bg-neutral-100"
+            >
+              View all
+            </Link>
           </div>
 
           <div className="px-5 py-3">
@@ -179,7 +243,10 @@ const AdminDashboard = async () => {
 
           <div className="overflow-y-auto flex flex-col gap-3 px-5">
             {data?.recentComplaints.length === 0 && (
-              <div>No Pending Complaints</div>
+              <div className="flex flex-col items-center justify-center gap-2 py-10 lg:py-20">
+                <LucideMessageCircleX className="size-32 bg-teal-500/10 p-6 rounded-full overflow-visible text-teal-600" />
+                <div className="font-medium mt-3">No Pending Complaints</div>
+              </div>
             )}
 
             <div>

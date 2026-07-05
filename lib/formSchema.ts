@@ -33,6 +33,12 @@ export const employeeFormSchema = z.object({
     })
     .min(10, "Phone Number must be 10 digits")
     .max(10, "Phone Number must be 10 digits"),
+  profileImage: z
+    .file({
+      error: "Input must be an image.",
+    })
+    .mime(["image/jpeg", "image/png", "image/webp"])
+    .max(5 * 1024 * 1024),
 });
 
 export const adminFormSchema = z.object({

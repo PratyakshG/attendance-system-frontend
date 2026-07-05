@@ -21,7 +21,7 @@ type Employee = {
   role: string;
   email: string;
   address: string;
-  profileImage: string;
+  profileImage: File;
   isActive: boolean;
   phoneNumber: number;
 };
