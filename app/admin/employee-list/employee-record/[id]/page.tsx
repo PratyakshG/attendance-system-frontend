@@ -21,16 +21,48 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+type UserData = {
+  _id: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  role: string;
+  uid: string;
+  employeeId: string;
+  profileImage: string;
+};
+
+type SummaryData = {
+  presentDays: number;
+  absentDays: number;
+  totalWorkingDays: number;
+  halfDays: number;
+  lateDays: number;
+};
+
+type AttendanceRecord = {
+  checkIn: string;
+  checkOut: string;
+  date: string;
+  scanStatus: string;
+  status: string;
+  isLate: boolean;
+  workMinutes: string;
+  user: UserData;
+};
+
 const EmployeeCalendar = () => {
   const { id } = useParams();
   const [user, setUser] = useState<Employee>();
-  const [attendance, setAttendance] = useState<AttendanceList[]>([]);
+  const [attendance, setAttendance] = useState<AttendanceRecord[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({
-    present: 0,
-    absent: 0,
-    total: 0,
+  const [stats, setStats] = useState<SummaryData>({
+    presentDays: 0,
+    absentDays: 0,
+    totalWorkingDays: 0,
+    halfDays: 0,
+    lateDays: 0,
   });
   const [hoveredDate, setHoveredDate] = useState<number | null>(null);
   const isMobile = useIsMobile();
@@ -41,32 +73,31 @@ const EmployeeCalendar = () => {
         setLoading(true);
 
         const month = format(currentMonth, "yyyy-MM");
-        console.log("month", month);
 
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/attendance/user/${id}?month=${month}`,
         ).then((res) => res.json());
-        console.log("response", response);
 
         if (!response.success) {
           throw new Error("failed to fetch attendance record");
         }
 
         const data = response.data;
-        console.log("att-record", data);
 
         if (response.success) {
           if (data) {
             setAttendance(data);
-            setStats({
-              present: data.presentDays,
-              absent: data.absentDays,
-              total: data.totalDays,
-            });
+            setStats(response.summary);
             setUser(response.user);
           } else {
             setAttendance([]);
-            setStats({ present: 0, absent: 0, total: 0 });
+            setStats({
+              presentDays: 0,
+              absentDays: 0,
+              totalWorkingDays: 0,
+              halfDays: 0,
+              lateDays: 0,
+            });
           }
         }
       } catch (error) {
@@ -140,8 +171,9 @@ const EmployeeCalendar = () => {
     <section className="space-y-5 relative h-full flex flex-col">
       <Header text={`Attendance Record`} />
 
-      <div className="flex gap-5">
-        <div>
+      <div className="flex max-lg:flex-col gap-5">
+        {/* Employee Details */}
+        <div className="flex lg:flex-col gap-3">
           <Image
             src={user?.profileImage ?? "/images/placeholder-img.jpg"}
             alt="profile-picture"
@@ -149,16 +181,13 @@ const EmployeeCalendar = () => {
             width={400}
             height={500}
           />
-          {/* 
-          <ActionsMenu
-            employee={user}
-            setLoading={setLoading}
-            fetchEmployees={fetchEmployees}
-          /> */}
+          {/* Need to add ActionsMenu -> update, edit or delete details of the employee */}
 
           <div className="space-y-2 mt-3">
             <div>
-              <h3 className="font-bold text-3xl leading-none">{user?.name}</h3>
+              <h3 className="font-bold text-2xl lg:text-3xl leading-none text-nowrap">
+                {user?.name}
+              </h3>
               <span className="text-sm font-medium">{user?.role}</span>
             </div>
 
@@ -204,8 +233,6 @@ const EmployeeCalendar = () => {
 
         {!loading && (
           <>
-            {/* User Details */}
-
             <div className="flex flex-col lg:flex-row gap-6 w-full">
               {/* Calendar */}
               <div className="bg-white rounded-lg shadow-md w-full border">
@@ -290,46 +317,49 @@ const EmployeeCalendar = () => {
               </div>
 
               {/* Stats */}
-              <div className="flex lg:flex-col grow-0 gap-2 lg:gap-5 items-start max-h-fit lg:max-w-3xs w-full *:w-full">
+              <div className="flex lg:flex-col grow-0 gap-2 lg:gap-5 items-start max-h-fit lg:max-w-3xs w-full *:w-full *:h-full">
                 <div className="rounded-xl shadow p-3 lg:p-5 space-y-2 bg-green-100">
                   <div className="flex items-center gap-2">
                     <Check className="bg-green-600 p-1 lg:p-2 rounded-full size-6 lg:size-10 text-white" />
                     <span className="font-bold text-xl leading-none">
-                      {stats.present}
+                      {stats?.presentDays}
                     </span>
                   </div>
-                  <span className="text-green-600 font-medium">Present</span>
+                  <span className="text-green-600 font-medium">
+                    Present Days
+                  </span>
                 </div>
 
                 <div className="rounded-xl shadow p-3 lg:p-5 space-y-2 bg-amber-100">
                   <div className="flex items-center gap-2">
                     <ClockAlert className="bg-amber-600 p-1 lg:p-2 rounded-full size-6 lg:size-10 text-white" />
                     <span className="font-bold text-xl leading-none">
-                      {/* {stats.late} */}
-                      N/A
+                      {stats?.lateDays}
                     </span>
                   </div>
-                  <span className="text-amber-600 font-medium">Late</span>
+                  <span className="text-amber-600 font-medium">Late Days</span>
                 </div>
 
                 <div className="rounded-xl shadow p-3 lg:p-5 space-y-2 bg-red-100">
                   <div className="flex items-center gap-2">
                     <X className="bg-red-600 p-1 lg:p-2 rounded-full size-6 lg:size-10 text-white" />
                     <span className="font-bold text-xl leading-none">
-                      {stats.absent}
+                      {stats?.absentDays}
                     </span>
                   </div>
-                  <span className="text-red-600 font-medium">Absent</span>
+                  <span className="text-red-600 font-medium">Absent Days</span>
                 </div>
 
                 <div className="rounded-xl shadow p-3 lg:p-5 space-y-2 bg-amber-100">
                   <div className="flex items-center gap-2">
                     <CalendarMinus className="bg-amber-600 p-1 lg:p-2 rounded-full size-6 lg:size-10 text-white" />
                     <span className="font-bold text-xl leading-none">
-                      {stats.total}
+                      {stats?.totalWorkingDays}
                     </span>
                   </div>
-                  <span className="text-amber-600 font-medium">Leaves</span>
+                  <span className="text-amber-600 font-medium">
+                    Working Days
+                  </span>
                 </div>
               </div>
             </div>

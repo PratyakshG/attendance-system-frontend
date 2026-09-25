@@ -176,7 +176,7 @@ const EmployeeCalendar = () => {
         <>
           <div className="flex flex-col lg:flex-row justify-between gap-6 w-full">
             {/* User Details */}
-            <div>
+            <div className="flex lg:flex-col gap-3">
               <Image
                 src={userData?.profileImage ?? "/images/placeholder-img.jpg"}
                 alt="profile-picture"
@@ -185,9 +185,9 @@ const EmployeeCalendar = () => {
                 height={500}
               />
 
-              <div className="space-y-2 mt-3">
+              <div className="space-y-2 mt-3 *:max-lg:text-wrap">
                 <div>
-                  <h3 className="font-bold text-3xl leading-none">
+                  <h3 className="font-bold text-2xl lg:text-3xl leading-none text-nowrap">
                     {userData?.name}
                   </h3>
                   <span className="text-sm font-medium">{user?.role}</span>
@@ -299,7 +299,7 @@ const EmployeeCalendar = () => {
             </div>
 
             {/* Stats */}
-            <div className="flex lg:flex-col grow-0 gap-2 lg:gap-5 items-start max-h-fit lg:max-w-3xs w-full *:w-full">
+            <div className="flex lg:flex-col grow-0 gap-2 lg:gap-5 items-start max-h-fit lg:max-w-3xs w-full *:w-full *:h-full">
               <div className="rounded-xl shadow p-3 lg:p-5 space-y-2 bg-green-100">
                 <div className="flex items-center gap-2">
                   <Check className="bg-green-600 p-1 lg:p-2 rounded-full size-6 lg:size-10 text-white" />
