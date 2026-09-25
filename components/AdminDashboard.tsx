@@ -1,27 +1,23 @@
-import React from "react";
+import { format } from "date-fns";
 import {
-  Calendar,
   Check,
   Clock,
-  FilePen,
   LucideMessageCircleX,
   MailWarning,
   Megaphone,
-  User,
-  X,
+  X
 } from "lucide-react";
-import { format } from "date-fns";
-import { FaUsers } from "react-icons/fa";
-import { IoAirplaneOutline } from "react-icons/io5";
-import { IoIosCalendar } from "react-icons/io";
 import Link from "next/link";
+import { FaUsers } from "react-icons/fa";
+import { IoIosCalendar } from "react-icons/io";
+import { IoAirplaneOutline } from "react-icons/io5";
 import { TbCalendarX } from "react-icons/tb";
 
 const AdminDashboard = async () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/dashboard/admin",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/admin`,
         {
           cache: "no-cache",
           next: {
@@ -34,7 +30,7 @@ const AdminDashboard = async () => {
         throw new Error(`HTTP error: Status ${response.status}`);
       }
       const result = await response.json();
-      // console.log(result.data);
+      console.log(result.data);
 
       return result.data;
     } catch (err) {
@@ -43,7 +39,7 @@ const AdminDashboard = async () => {
   };
 
   const data = await fetchData();
-  const notices = data.notices.filter(
+  const notices = data?.notices?.filter(
     (item: Notice) => new Date(item.createdAt) > new Date(),
   );
 
@@ -123,14 +119,14 @@ const AdminDashboard = async () => {
           </div>
 
           <div className="px-5 py-3 overflow-y-auto flex flex-col gap-3">
-            {notices.length === 0 && (
+            {notices?.length === 0 && (
               <div className="flex flex-col items-center justify-center gap-2 py-10 lg:py-20">
                 <Megaphone className="size-32 bg-teal-500/10 p-6 rounded-full overflow-visible text-teal-600" />
                 <div className="font-medium mt-3">No New Notices</div>
               </div>
             )}
 
-            {notices.map((item: Notice, index: number) => (
+            {notices?.map((item: Notice, index: number) => (
               <div
                 key={index}
                 className={`p-4 rounded-md bg-neutral-100 relative`}
@@ -183,10 +179,7 @@ const AdminDashboard = async () => {
             )}
 
             {data?.pendingLeaves.map((item: Leave, index: number) => (
-              <div
-                key={index}
-                className="border p-4 rounded-md"
-              >
+              <div key={index} className="border p-4 rounded-md">
                 <p className="font-semibold text-lg">{item.user.name}</p>
                 <p className="text-sm text-neutral-500">
                   {format(item.startDate, "dd MMM, yyyy")} -{" "}
@@ -251,10 +244,7 @@ const AdminDashboard = async () => {
 
             <div>
               {data?.recentComplaints.map((item: Complaint, index: number) => (
-                <div
-                  key={index}
-                  className="border rounded-md relative"
-                >
+                <div key={index} className="border rounded-md relative">
                   <div className="text-[10px] px-2 py-1 rounded-full bg-red-200 text-red-700 absolute top-2 right-5 font-semibold tracking-normal">
                     New
                   </div>

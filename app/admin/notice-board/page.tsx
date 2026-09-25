@@ -4,16 +4,11 @@ import EmptyRecord from "@/components/EmptyRecord";
 import Header from "@/components/Header";
 import { TableLoadingSkeleton } from "@/components/LoadingSkeleton";
 import DeleteConfirmation from "@/components/modals/ConfirmationModal";
+import UpdateNotice from "@/components/modals/UpdateNotice";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useUser } from "@/contexts/userContext";
-import { useFetchNoticeBoard } from "@/hooks/useNotice";
-import { Pencil } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
 import {
   Select,
   SelectContent,
@@ -21,8 +16,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { useUser } from "@/contexts/userContext";
+import { useFetchNoticeBoard } from "@/hooks/useNotice";
 import { format } from "date-fns";
-import UpdateNotice from "@/components/modals/UpdateNotice";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const NoticeBoard = () => {
   const user = useUser();

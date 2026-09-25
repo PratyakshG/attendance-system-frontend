@@ -23,7 +23,7 @@ const AttendanceListPage = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `https://rfidattendance-mu.vercel.app/api/attendance/view/today`,
+          `https://rfidattendance-mu.vercel.app/api/attendance/view/all`,
           {
             cache: "no-store",
           },
@@ -52,7 +52,7 @@ const AttendanceListPage = () => {
 
       <DropdownMenu>
         <DropdownMenuTrigger className="mb-2.5 px-2.5 py-1.5 font-light flex items-center gap-1 bg-neutral-100 w-fit rounded-md border border-neutral-200 capitalize">
-          <span className="text-sm">Today attendance</span>
+          <span className="text-sm">All attendance</span>
           <ChevronDown size={16} strokeWidth={1.5} />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">

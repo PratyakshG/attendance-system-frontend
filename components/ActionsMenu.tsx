@@ -5,24 +5,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Calendar, EllipsisVertical } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 import DeleteConfirmation from "./modals/ConfirmationModal";
 import UpdateEmployee from "./modals/UpdateEmployee";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 const ActionsMenu = ({
   modal,
   employee,
   setLoading,
   fetchEmployees,
+  asChild,
 }: {
   modal?: boolean;
   employee: Employee;
   setLoading: Dispatch<SetStateAction<boolean>>;
   fetchEmployees: () => void;
+  asChild?: boolean;
 }) => {
   const router = useRouter();
 
@@ -69,22 +70,15 @@ const ActionsMenu = ({
   return (
     <>
       <DropdownMenu modal={modal ?? false}>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger
+          asChild={asChild}
+          onClick={(e) => {
+            e.preventDefault();
+          }}
+        >
           <EllipsisVertical size={18} />
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="start"
-          className="min-w-24"
-        >
-          <DropdownMenuItem className="focus:bg-primary-1/20 cursor-pointer">
-            <Calendar color="black" />
-            <Link href={`/admin/employee-record/${employee._id}`}>
-              See Attendance
-            </Link>
-          </DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-
+        <DropdownMenuContent align="start" className="min-w-24">
           <DropdownMenuItem asChild>
             <UpdateEmployee
               employee={employee}

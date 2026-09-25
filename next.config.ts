@@ -6,9 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "ik.imagekit.io", // Replace with your ImageKit hostname
-        port: "",
-        pathname: "/crewbasesol/**", // Replace with your ImageKit ID and potentially a path prefix
+        hostname: "res.cloudinary.com",
       },
     ],
   },

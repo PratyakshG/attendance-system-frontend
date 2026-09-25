@@ -92,44 +92,6 @@ const NewEmployee = ({
     },
   });
 
-  // const onSubmit = async (data: z.infer<typeof employeeFormSchema>) => {
-  //   console.log("formData", JSON.stringify(data));
-  //   try {
-  //     const response = await fetch(
-  //       "https://rfidattendance-mu.vercel.app/api/user/register",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(data),
-  //       },
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-
-  //     const result = await response.json();
-  //     console.log("Success:", result);
-
-  //     form.reset();
-  //     toast("You submitted the following values:", {
-  //       description: (
-  //         <pre className="mt-2 w-[320px] overflow-x-auto rounded-md p-4 text-primary">
-  //           <code>{JSON.stringify(data, null, 2)}</code>
-  //         </pre>
-  //       ),
-  //       position: "top-right",
-  //     });
-
-  //     router.refresh();
-  //     fetchEmployees();
-  //   } catch (error) {
-  //     console.error("Error fetching next employee ID:", error);
-  //   }
-  // };
-
   const onSubmit = async (data: z.infer<typeof employeeFormSchema>) => {
     try {
       const formData = new FormData();
@@ -141,7 +103,7 @@ const NewEmployee = ({
         }
       });
 
-      // append file separately
+      // append image separately
       if (data.profileImage) {
         formData.append("profileImage", data.profileImage);
       }
@@ -162,6 +124,16 @@ const NewEmployee = ({
       console.log("Success:", result);
 
       form.reset();
+
+      toast("You submitted the following values:", {
+        description: (
+          <pre className="mt-2 w-[320px] overflow-x-auto rounded-md p-4 text-primary">
+            <code>{JSON.stringify(data, null, 2)}</code>
+          </pre>
+        ),
+        position: "top-right",
+      });
+
       router.refresh();
       fetchEmployees();
     } catch (error) {
@@ -186,10 +158,7 @@ const NewEmployee = ({
         }}
       >
         <DialogTrigger asChild>
-          <Button
-            variant="default"
-            className="w-fit self-end"
-          >
+          <Button variant="default" className="w-fit self-end">
             <Plus />
             New Employee
           </Button>
@@ -200,10 +169,7 @@ const NewEmployee = ({
             <DialogTitle>Add New Employee</DialogTitle>
           </DialogHeader>
 
-          <form
-            id="add-employee-form"
-            onSubmit={form.handleSubmit(onSubmit)}
-          >
+          <form id="add-employee-form" onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup className="gap-4">
               <Controller
                 name="profileImage"
@@ -310,10 +276,7 @@ const NewEmployee = ({
                         </SelectTrigger>
                         <SelectContent>
                           {availableUID.map((item: UID, index) => (
-                            <SelectItem
-                              key={index}
-                              value={item.uid}
-                            >
+                            <SelectItem key={index} value={item.uid}>
                               {item.uid}
                             </SelectItem>
                           ))}
@@ -430,10 +393,7 @@ const NewEmployee = ({
             >
               Reset
             </Button>
-            <Button
-              type="submit"
-              form="add-employee-form"
-            >
+            <Button type="submit" form="add-employee-form">
               Submit
             </Button>
           </Field>
