@@ -1,13 +1,13 @@
 import * as React from "react";
 
 export const useFetchEmployees = () => {
-  const [employees, setEmployees] = React.useState<Employee[]>([]);
+  const [employees, setEmployees] = React.useState<ServerEmployee[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   const fetchEmployees = async () => {
     try {
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/user/view/all"
+        "https://rfidattendance-mu.vercel.app/api/user/view/all",
       );
 
       if (!response.ok) {

@@ -24,6 +24,7 @@ import { employeeFormSchema } from "@/lib/formSchema";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -54,29 +55,35 @@ const UpdateEmployee = ({
       address: employee.address,
       phoneNumber: employee.phoneNumber?.toString() ?? "",
       password: employee.password,
+      profileImage: undefined,
     },
   });
 
   const onSubmit = async (data: z.infer<typeof employeeFormSchema>) => {
-    // console.log("formData", data);
     try {
+      const formData = new FormData();
+
+      Object.entries(data).forEach(([key, value]) => {
+        if (key !== "profileImage" && value !== undefined && value !== null) {
+          formData.append(key, String(value));
+        }
+      });
+
+      if (data.profileImage) {
+        formData.append("profileImage", data.profileImage);
+      }
+
       const response = await fetch(
-        `https://rfidattendance-mu.vercel.app/api/user/update/${employee._id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/update/${employee._id}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+          body: formData,
         },
       );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
-      // const result = await response.json();
-      // console.log("Success:", result);
 
       form.reset(data);
       toast("You submitted the following values:", {
@@ -119,6 +126,39 @@ const UpdateEmployee = ({
             onSubmit={form.handleSubmit(onSubmit, onError)}
           >
             <FieldGroup className="gap-4">
+              {employee.profileImage && (
+                <Image
+                  src={employee.profileImage}
+                  alt={employee.name}
+                  height={300}
+                  width={400}
+                />
+              )}
+
+              <Controller
+                name="profileImage"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-employee-profileImage">
+                      Profile Image
+                    </FieldLabel>
+                    <Input
+                      type="file"
+                      id="form-employee-profileImage"
+                      onChange={(e) => field.onChange(e.target.files?.[0])}
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      ref={field.ref}
+                      accept="image/*"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
               <Controller
                 name="name"
                 control={form.control}
@@ -289,10 +329,7 @@ const UpdateEmployee = ({
           </form>
 
           <Field orientation="horizontal">
-            <Button
-              type="submit"
-              form="update-employee-form"
-            >
+            <Button type="submit" form="update-employee-form">
               Update Details
             </Button>
           </Field>

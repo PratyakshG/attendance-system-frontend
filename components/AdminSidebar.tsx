@@ -97,12 +97,7 @@ export default function AdminSidebar() {
     <Sidebar variant="floating">
       <SidebarHeader className="pl-3 pt-3 border-b font-semibold">
         <div className="flex items-center gap-3 text-wrap">
-          <Image
-            src="/images/logo.png"
-            alt="logo"
-            height={80}
-            width={80}
-          />
+          <Image src="/images/logo.png" alt="logo" height={80} width={80} />
           <span>MMS Attendance System</span>
         </div>
       </SidebarHeader>
@@ -111,13 +106,14 @@ export default function AdminSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem
-                  key={item.title}
-                  onClick={handleMobileToggle}
-                >
+                <SidebarMenuItem key={item.title} onClick={handleMobileToggle}>
                   <SidebarMenuButton
                     asChild
-                    isActive={item.url === pathname}
+                    isActive={
+                      item.url === "/admin"
+                        ? item.url === pathname
+                        : pathname.startsWith(item.url)
+                    }
                     size="lg"
                   >
                     <Link href={item.url}>

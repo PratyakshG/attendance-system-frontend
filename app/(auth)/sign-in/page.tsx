@@ -43,12 +43,11 @@ const Login = () => {
       } else {
         router.push("/employee");
       }
-
-      router.refresh();
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
+      router.refresh();
     }
   };
 

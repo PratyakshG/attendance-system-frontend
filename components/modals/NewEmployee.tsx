@@ -88,20 +88,31 @@ const NewEmployee = ({
       address: "",
       phoneNumber: "",
       password: "",
+      profileImage: undefined,
     },
   });
 
   const onSubmit = async (data: z.infer<typeof employeeFormSchema>) => {
-    console.log("formData", JSON.stringify(data));
     try {
+      const formData = new FormData();
+
+      // append text fields
+      Object.entries(data).forEach(([key, value]) => {
+        if (key !== "profileImage") {
+          formData.append(key, String(value));
+        }
+      });
+
+      // append image separately
+      if (data.profileImage) {
+        formData.append("profileImage", data.profileImage);
+      }
+
       const response = await fetch(
         "https://rfidattendance-mu.vercel.app/api/user/register",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+          body: formData,
         },
       );
 
@@ -113,6 +124,7 @@ const NewEmployee = ({
       console.log("Success:", result);
 
       form.reset();
+
       toast("You submitted the following values:", {
         description: (
           <pre className="mt-2 w-[320px] overflow-x-auto rounded-md p-4 text-primary">
@@ -125,7 +137,7 @@ const NewEmployee = ({
       router.refresh();
       fetchEmployees();
     } catch (error) {
-      console.error("Error fetching next employee ID:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -146,10 +158,7 @@ const NewEmployee = ({
         }}
       >
         <DialogTrigger asChild>
-          <Button
-            variant="default"
-            className="w-fit self-end"
-          >
+          <Button variant="default" className="w-fit self-end">
             <Plus />
             New Employee
           </Button>
@@ -160,11 +169,31 @@ const NewEmployee = ({
             <DialogTitle>Add New Employee</DialogTitle>
           </DialogHeader>
 
-          <form
-            id="add-employee-form"
-            onSubmit={form.handleSubmit(onSubmit)}
-          >
+          <form id="add-employee-form" onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup className="gap-4">
+              <Controller
+                name="profileImage"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-employee-profileImage">
+                      Profile Image
+                    </FieldLabel>
+                    <Input
+                      type="file"
+                      id="form-employee-profileImage"
+                      onChange={(e) => field.onChange(e.target.files?.[0])}
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      ref={field.ref}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
               <Controller
                 name="name"
                 control={form.control}
@@ -247,10 +276,7 @@ const NewEmployee = ({
                         </SelectTrigger>
                         <SelectContent>
                           {availableUID.map((item: UID, index) => (
-                            <SelectItem
-                              key={index}
-                              value={item.uid}
-                            >
+                            <SelectItem key={index} value={item.uid}>
                               {item.uid}
                             </SelectItem>
                           ))}
@@ -295,13 +321,23 @@ const NewEmployee = ({
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
                       <FieldLabel htmlFor="form-employee-role">Role</FieldLabel>
-                      <Input
-                        {...field}
-                        id="form-employee-role"
-                        aria-invalid={fieldState.invalid}
-                        placeholder="Enter Role"
-                        autoComplete="off"
-                      />
+                      <Select
+                        name={field.name}
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger
+                          aria-invalid={fieldState.invalid}
+                          id="form-employee-role"
+                        >
+                          <SelectValue placeholder="Enter Role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Employee">Employee</SelectItem>
+                          <SelectItem value="Manager">Manager</SelectItem>
+                          <SelectItem value="Admin">Admin</SelectItem>
+                        </SelectContent>
+                      </Select>
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
                       )}
@@ -357,10 +393,7 @@ const NewEmployee = ({
             >
               Reset
             </Button>
-            <Button
-              type="submit"
-              form="add-employee-form"
-            >
+            <Button type="submit" form="add-employee-form">
               Submit
             </Button>
           </Field>

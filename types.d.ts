@@ -21,10 +21,13 @@ type Employee = {
   role: string;
   email: string;
   address: string;
-  profileImage: string;
   isActive: boolean;
   phoneNumber: number;
+  profileImage: string;
 };
+
+type ServerEmployee = Employee & { profileImage: string };
+type ClientEmployee = Employee & { profileImage: File };
 
 type UID = {
   _id: string;
