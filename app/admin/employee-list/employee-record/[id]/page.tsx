@@ -1,9 +1,9 @@
 "use client";
 
-// import ActionsMenu from "@/components/ActionsMenu";
+import EmployeeActions from "@/components/EmployeeActions";
 import Header from "@/components/Header";
 import { useIsMobile } from "@/hooks/use-mobile";
-// import { useFetchEmployees } from "@/hooks/useFetchEmployees";
+import { useFetchEmployees } from "@/hooks/useFetchEmployees";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import {
@@ -21,17 +21,6 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-type UserData = {
-  _id: string;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  role: string;
-  uid: string;
-  employeeId: string;
-  profileImage: string;
-};
-
 type SummaryData = {
   presentDays: number;
   absentDays: number;
@@ -48,7 +37,7 @@ type AttendanceRecord = {
   status: string;
   isLate: boolean;
   workMinutes: string;
-  user: UserData;
+  user: Employee;
 };
 
 const EmployeeCalendar = () => {
@@ -66,6 +55,8 @@ const EmployeeCalendar = () => {
   });
   const [hoveredDate, setHoveredDate] = useState<number | null>(null);
   const isMobile = useIsMobile();
+
+  const { fetchEmployees } = useFetchEmployees();
 
   useEffect(() => {
     const fetchAttendance = async () => {
@@ -172,52 +163,6 @@ const EmployeeCalendar = () => {
       <Header text={`Attendance Record`} />
 
       <div className="flex max-lg:flex-col gap-5">
-        {/* Employee Details */}
-        <div className="flex lg:flex-col gap-3">
-          <Image
-            src={user?.profileImage ?? "/images/placeholder-img.jpg"}
-            alt="profile-picture"
-            className="aspect-4/5 max-w-3xs w-full bg-neutral-200 rounded-lg border object-fill object-center"
-            width={400}
-            height={500}
-          />
-          {/* Need to add ActionsMenu -> update, edit or delete details of the employee */}
-
-          <div className="space-y-2 mt-3">
-            <div>
-              <h3 className="font-bold text-2xl lg:text-3xl leading-none text-nowrap">
-                {user?.name}
-              </h3>
-              <span className="text-sm font-medium">{user?.role}</span>
-            </div>
-
-            <h3 className="flex items-center max-w-2xs w-full *:min-w-fit gap-2 text-sm">
-              <Hash size={16} />
-              {user?.employeeId}
-            </h3>
-
-            <h3 className="flex items-center max-w-2xs w-full *:min-w-fit gap-2 text-sm">
-              <IdCard size={16} />
-              {user?.uid}
-            </h3>
-
-            <h3 className="flex items-center max-w-2xs w-full *:min-w-fit gap-2 text-sm">
-              <Phone size={16} />
-              {user?.phoneNumber}
-            </h3>
-
-            <h3 className="flex items-center max-w-2xs w-full *:min-w-fit gap-2 text-sm">
-              <Mail size={16} />
-              {user?.email}
-            </h3>
-
-            <h3 className="flex items-start max-w-2xs w-full *:min-w-fit gap-2 text-sm">
-              <MapPin size={16} />
-              {user?.address}
-            </h3>
-          </div>
-        </div>
-
         {loading && (
           <div className="grid max-lg:grid-rows-7 lg:grid-cols-11 gap-6 h-full py-5">
             <div className="max-lg:row-span-5 lg:col-span-8 w-full h-full bg-neutral-200 rounded-lg animate-pulse" />
@@ -233,6 +178,59 @@ const EmployeeCalendar = () => {
 
         {!loading && (
           <>
+            {/* Employee Details */}
+            <div className="flex lg:flex-col gap-3">
+              <Image
+                src={user?.profileImage ?? "/images/placeholder-img.jpg"}
+                alt="profile-picture"
+                className="aspect-4/5 h-fit max-w-32 lg:max-w-3xs w-full bg-neutral-200 rounded-lg border object-cover object-center"
+                width={400}
+                height={500}
+              />
+
+              <div className="flex flex-col gap-y-2 mt-3 max-w-full">
+                <div>
+                  <h3 className="font-bold text-2xl lg:text-3xl leading-none text-nowrap">
+                    {user?.name}
+                  </h3>
+                  <span className="text-sm font-medium">
+                    {user?.role ?? "N/A"}
+                  </span>
+                </div>
+
+                <h3 className="flex items-center max-w-2xs w-full *:min-w-fit gap-2 text-sm">
+                  <Hash size={16} />
+                  {user?.employeeId}
+                </h3>
+
+                <h3 className="flex items-center max-w-2xs w-full *:min-w-fit gap-2 text-sm">
+                  <IdCard size={16} />
+                  {user?.uid}
+                </h3>
+
+                <h3 className="flex items-center max-w-2xs w-full *:min-w-fit gap-2 text-sm">
+                  <Phone size={16} />
+                  {user?.phoneNumber}
+                </h3>
+
+                <h3 className="flex items-center max-w-2xs w-full *:min-w-fit gap-2 text-sm">
+                  <Mail size={16} />
+                  {user?.email}
+                </h3>
+
+                <h3 className="flex items-start max-w-2xs w-full *:min-w-fit gap-2 text-sm">
+                  <MapPin size={16} />
+                  {user?.address}
+                </h3>
+
+                <EmployeeActions
+                  employee={user as Employee}
+                  setLoading={setLoading}
+                  fetchEmployees={fetchEmployees}
+                />
+              </div>
+            </div>
+
             <div className="flex flex-col lg:flex-row gap-6 w-full">
               {/* Calendar */}
               <div className="bg-white rounded-lg shadow-md w-full border">
@@ -357,7 +355,7 @@ const EmployeeCalendar = () => {
                       {stats?.totalWorkingDays}
                     </span>
                   </div>
-                  <span className="text-amber-600 font-medium">
+                  <span className="text-amber-600 font-medium leading-1">
                     Working Days
                   </span>
                 </div>

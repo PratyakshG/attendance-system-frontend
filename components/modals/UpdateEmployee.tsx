@@ -111,9 +111,11 @@ const UpdateEmployee = ({
   return (
     <div className={cn(position)}>
       <Dialog>
-        <DialogTrigger className="text-sm flex items-center gap-2 px-2 py-1.5 hover:bg-primary-1/20 w-full rounded-sm">
-          <Pencil size={16} />
-          Update
+        <DialogTrigger asChild>
+          <Button className="w-full">
+            <Pencil size={16} />
+            Update
+          </Button>
         </DialogTrigger>
 
         <DialogContent>
@@ -121,102 +123,38 @@ const UpdateEmployee = ({
             <DialogTitle>Update Employee</DialogTitle>
           </DialogHeader>
 
-          <form
-            id="update-employee-form"
-            onSubmit={form.handleSubmit(onSubmit, onError)}
-          >
-            <FieldGroup className="gap-4">
-              {employee.profileImage && (
-                <Image
-                  src={employee.profileImage}
-                  alt={employee.name}
-                  height={300}
-                  width={400}
-                />
-              )}
-
-              <Controller
-                name="profileImage"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-employee-profileImage">
-                      Profile Image
-                    </FieldLabel>
-                    <Input
-                      type="file"
-                      id="form-employee-profileImage"
-                      onChange={(e) => field.onChange(e.target.files?.[0])}
-                      onBlur={field.onBlur}
-                      name={field.name}
-                      ref={field.ref}
-                      accept="image/*"
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
+          <div className="no-scrollbar max-h-[80vh] overflow-y-auto">
+            <form
+              id="update-employee-form"
+              onSubmit={form.handleSubmit(onSubmit, onError)}
+            >
+              <FieldGroup className="gap-4">
+                {employee.profileImage && (
+                  <Image
+                    src={employee.profileImage}
+                    alt={employee.name}
+                    height={300}
+                    width={400}
+                    className="w-full h-full aspect-4/5 max-w-1/3 rounded-lg"
+                  />
                 )}
-              />
 
-              <Controller
-                name="name"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="update-employee-form-name">
-                      Name
-                    </FieldLabel>
-                    <Input
-                      {...field}
-                      id="update-employee-form-name"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="Enter Name"
-                      autoComplete="off"
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
-
-              <Controller
-                name="email"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-employee-email">Email</FieldLabel>
-                    <Input
-                      {...field}
-                      id="form-employee-email"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="Enter Email Address"
-                      autoComplete="off"
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
-
-              <Field orientation="horizontal">
                 <Controller
-                  name="uid"
-                  disabled
+                  name="profileImage"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="update-employee-form-uid">
-                        UID
+                      <FieldLabel htmlFor="form-employee-profileImage">
+                        Profile Image
                       </FieldLabel>
                       <Input
-                        {...field}
-                        id="update-employee-form-uid"
-                        aria-invalid={fieldState.invalid}
-                        placeholder="Select UID"
-                        autoComplete="off"
+                        type="file"
+                        id="form-employee-profileImage"
+                        onChange={(e) => field.onChange(e.target.files?.[0])}
+                        onBlur={field.onBlur}
+                        name={field.name}
+                        ref={field.ref}
+                        accept="image/*"
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -224,44 +162,18 @@ const UpdateEmployee = ({
                     </Field>
                   )}
                 />
-                <Controller
-                  name="phoneNumber"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="update-employee-form-phoneNumber">
-                        Phone Number
-                      </FieldLabel>
-                      <Input
-                        {...field}
-                        type="text"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        id="update-employee-form-phoneNumber"
-                        aria-invalid={fieldState.invalid}
-                        placeholder="Enter Phone Number"
-                        autoComplete="off"
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-              </Field>
 
-              <Field orientation="horizontal">
                 <Controller
-                  name="role"
+                  name="name"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="update-employee-form-role">
-                        Role
+                      <FieldLabel htmlFor="update-employee-form-name">
+                        Name
                       </FieldLabel>
                       <Input
                         {...field}
-                        id="update-employee-form-role"
+                        id="update-employee-form-name"
                         aria-invalid={fieldState.invalid}
                         placeholder="Enter Name"
                         autoComplete="off"
@@ -274,18 +186,18 @@ const UpdateEmployee = ({
                 />
 
                 <Controller
-                  name="password"
+                  name="email"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="update-employee-password">
-                        Password
+                      <FieldLabel htmlFor="form-employee-email">
+                        Email
                       </FieldLabel>
                       <Input
                         {...field}
-                        id="update-employee-password"
+                        id="form-employee-email"
                         aria-invalid={fieldState.invalid}
-                        placeholder="Enter Password"
+                        placeholder="Enter Email Address"
                         autoComplete="off"
                       />
                       {fieldState.invalid && (
@@ -294,39 +206,134 @@ const UpdateEmployee = ({
                     </Field>
                   )}
                 />
-              </Field>
 
-              <Controller
-                name="address"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="update-employee-form-address">
-                      Address
-                    </FieldLabel>
-                    <InputGroup>
-                      <InputGroupTextarea
-                        {...field}
-                        id="update-employee-form-address"
-                        placeholder="Address"
-                        rows={6}
-                        className="min-h-24 resize-none"
-                        aria-invalid={fieldState.invalid}
-                      />
-                      <InputGroupAddon align="block-end">
-                        <InputGroupText className="tabular-nums">
-                          {field?.value?.length ?? "0"}/100 characters
-                        </InputGroupText>
-                      </InputGroupAddon>
-                    </InputGroup>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                <Field orientation="horizontal">
+                  <Controller
+                    name="uid"
+                    disabled
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor="update-employee-form-uid">
+                          UID
+                        </FieldLabel>
+                        <Input
+                          {...field}
+                          id="update-employee-form-uid"
+                          aria-invalid={fieldState.invalid}
+                          placeholder="Select UID"
+                          autoComplete="off"
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
                     )}
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-          </form>
+                  />
+                  <Controller
+                    name="phoneNumber"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor="update-employee-form-phoneNumber">
+                          Phone Number
+                        </FieldLabel>
+                        <Input
+                          {...field}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          id="update-employee-form-phoneNumber"
+                          aria-invalid={fieldState.invalid}
+                          placeholder="Enter Phone Number"
+                          autoComplete="off"
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                </Field>
+
+                <Field orientation="horizontal">
+                  <Controller
+                    name="role"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor="update-employee-form-role">
+                          Role
+                        </FieldLabel>
+                        <Input
+                          {...field}
+                          id="update-employee-form-role"
+                          aria-invalid={fieldState.invalid}
+                          placeholder="Enter Name"
+                          autoComplete="off"
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+
+                  <Controller
+                    name="password"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor="update-employee-password">
+                          Password
+                        </FieldLabel>
+                        <Input
+                          {...field}
+                          id="update-employee-password"
+                          aria-invalid={fieldState.invalid}
+                          placeholder="Enter Password"
+                          autoComplete="off"
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                </Field>
+
+                <Controller
+                  name="address"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="update-employee-form-address">
+                        Address
+                      </FieldLabel>
+                      <InputGroup>
+                        <InputGroupTextarea
+                          {...field}
+                          id="update-employee-form-address"
+                          placeholder="Address"
+                          rows={6}
+                          className="min-h-24 resize-none"
+                          aria-invalid={fieldState.invalid}
+                        />
+                        <InputGroupAddon align="block-end">
+                          <InputGroupText className="tabular-nums">
+                            {field?.value?.length ?? "0"}/100 characters
+                          </InputGroupText>
+                        </InputGroupAddon>
+                      </InputGroup>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </FieldGroup>
+            </form>
+          </div>
 
           <Field orientation="horizontal">
             <Button type="submit" form="update-employee-form">

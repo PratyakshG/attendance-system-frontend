@@ -50,15 +50,12 @@ const ConfirmationModal = ({
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button
-            size={size}
-            variant={variant}
-            className={customClassName}
-          >
+          <Button size={size} variant={variant} className={customClassName}>
             {logoutIcon ? <LogOutIcon size={16} /> : <Trash size={16} />}
             {btnTitle}
           </Button>
         </DialogTrigger>
+
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
@@ -68,10 +65,7 @@ const ConfirmationModal = ({
           </DialogHeader>
 
           <DialogFooter className="sm:flex-col items-end">
-            <DialogClose
-              asChild
-              className="w-fit"
-            >
+            <DialogClose asChild className="w-fit">
               <Button
                 type="button"
                 variant="destructive"

@@ -1,29 +1,17 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { EllipsisVertical } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 import DeleteConfirmation from "./modals/ConfirmationModal";
 import UpdateEmployee from "./modals/UpdateEmployee";
 
-const ActionsMenu = ({
-  modal,
+const EmployeeActions = ({
   employee,
   setLoading,
   fetchEmployees,
-  asChild,
 }: {
-  modal?: boolean;
   employee: Employee;
   setLoading: Dispatch<SetStateAction<boolean>>;
   fetchEmployees: () => void;
-  asChild?: boolean;
 }) => {
   const router = useRouter();
 
@@ -68,37 +56,15 @@ const ActionsMenu = ({
   };
 
   return (
-    <>
-      <DropdownMenu modal={modal ?? false}>
-        <DropdownMenuTrigger
-          asChild={asChild}
-          onClick={(e) => {
-            e.preventDefault();
-          }}
-        >
-          <EllipsisVertical size={18} />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="min-w-24">
-          <DropdownMenuItem asChild>
-            <UpdateEmployee
-              employee={employee}
-              fetchEmployees={fetchEmployees}
-            />
-          </DropdownMenuItem>
+    <div className="flex items-center gap-2">
+      <UpdateEmployee employee={employee} fetchEmployees={fetchEmployees} />
 
-          <DropdownMenuSeparator />
-
-          <DropdownMenuItem asChild>
-            <DeleteConfirmation
-              pendingFunction={() => handleDelete(employee._id)}
-              variant="destructive"
-              customClassName="w-full justify-start"
-            />
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
+      <DeleteConfirmation
+        pendingFunction={() => handleDelete(employee._id)}
+        variant="destructive"
+      />
+    </div>
   );
 };
 
-export default ActionsMenu;
+export default EmployeeActions;

@@ -15,12 +15,9 @@ import { useFetchEmployees } from "@/hooks/useFetchEmployees";
 import { ChevronDown } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AttendanceLoadingSkeleton } from "../../../components/LoadingSkeleton";
-import ActionsMenu from "@/components/ActionsMenu";
-import { cn } from "@/lib/utils";
 
 const EmployeeListPage = () => {
-  const { loading, employees, fetchEmployees, setLoading } =
-    useFetchEmployees();
+  const { loading, employees, fetchEmployees } = useFetchEmployees();
   const [filter, setFilter] = useState("all");
 
   //filter data
@@ -74,24 +71,6 @@ const EmployeeListPage = () => {
             ))}
           </div>
         )}
-
-        {data?.map((employee: Employee) => (
-          <div
-            key={employee.uid}
-            className={cn(
-              "w-full min-w-6xl flex items-center gap-5 px-3 py-2.5 rounded-2xl border border-neutral-200",
-              employee.role === "Employee" ? "bg-neutral-100" : "bg-green-100",
-            )}
-          >
-            <ActionsMenu
-              employee={employee}
-              setLoading={setLoading}
-              fetchEmployees={fetchEmployees}
-            />
-
-            <span>{employee.name}</span>
-          </div>
-        ))}
       </div>
     </section>
   );
