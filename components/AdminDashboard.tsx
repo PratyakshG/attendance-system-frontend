@@ -1,11 +1,11 @@
-import { format } from "date-fns";
+import { format, formatDate } from "date-fns";
 import {
   Check,
   Clock,
   LucideMessageCircleX,
   MailWarning,
   Megaphone,
-  X
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { FaUsers } from "react-icons/fa";
@@ -30,7 +30,7 @@ const AdminDashboard = async () => {
         throw new Error(`HTTP error: Status ${response.status}`);
       }
       const result = await response.json();
-      console.log(result.data);
+      // console.log(result.data);
 
       return result.data;
     } catch (err) {
@@ -242,18 +242,22 @@ const AdminDashboard = async () => {
               </div>
             )}
 
-            <div>
+            <div className="space-y-2">
               {data?.recentComplaints.map((item: Complaint, index: number) => (
-                <div key={index} className="border rounded-md relative">
-                  <div className="text-[10px] px-2 py-1 rounded-full bg-red-200 text-red-700 absolute top-2 right-5 font-semibold tracking-normal">
+                <div
+                  key={index}
+                  className="border rounded-md relative px-3 py-2"
+                >
+                  <p className="text-xs text-neutral-500">{formatDate(item.createdAt, "hh:mm | dd/mm/yyyy")}</p>
+                  <div className="text-[10px] px-2 py-1 rounded bg-red-200 text-red-700 absolute top-2 right-3 font-medium tracking-normal">
                     New
                   </div>
 
-                  <p className="font-semibold text-lg">{item.user.name}</p>
-                  <p className="font-medium text-sm text-neutral-500">
-                    {item.description}
+                  <p className="font-semibold text-sm lg:text-base">{item.user.name}</p>
+                  <p className="font-medium text-xs lg:text-sm text-neutral-500">
+                    {item.subject}
                   </p>
-                  <p>{item.subject}</p>
+                  <p className="text-xs lg:text-sm text-neutral-500">{item.description}</p>
                 </div>
               ))}
             </div>
