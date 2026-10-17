@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
     //post api call to backend
     const response = await fetch(
-      "https://rfidattendance-mu.vercel.app/api/user/login",
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user/login`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
