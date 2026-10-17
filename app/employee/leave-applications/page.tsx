@@ -46,7 +46,7 @@ const LeaveApplications = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `https://rfidattendance-mu.vercel.app/api/leave/get?userId=${user?._id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/leave/get?userId=${user?._id}`,
         );
 
         if (!response.ok) {
@@ -73,7 +73,7 @@ const LeaveApplications = () => {
 
     try {
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/leave/submit",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/leave/submit`,
         {
           method: "POST",
           headers: {
@@ -133,10 +133,7 @@ const LeaveApplications = () => {
           <Field>
             <Label htmlFor="new-leave-startDate">From</Label>
             <Popover>
-              <PopoverTrigger
-                id="new-leave-startDate"
-                asChild
-              >
+              <PopoverTrigger id="new-leave-startDate" asChild>
                 <Button
                   variant="outline"
                   data-empty={!newLeave.startDate}
@@ -150,10 +147,7 @@ const LeaveApplications = () => {
                   <ChevronDownIcon />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent
-                className="w-auto p-0"
-                align="start"
-              >
+              <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
                   disabled={{
@@ -170,10 +164,7 @@ const LeaveApplications = () => {
           <Field>
             <Label htmlFor="new-leave-endDate">To</Label>
             <Popover>
-              <PopoverTrigger
-                id="new-leave-endDate"
-                asChild
-              >
+              <PopoverTrigger id="new-leave-endDate" asChild>
                 <Button
                   variant="outline"
                   data-empty={!newLeave.endDate}
@@ -187,10 +178,7 @@ const LeaveApplications = () => {
                   <ChevronDownIcon />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent
-                className="w-auto p-0"
-                align="start"
-              >
+              <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
                   disabled={{

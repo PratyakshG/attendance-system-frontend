@@ -13,7 +13,7 @@ const NoticeBoard = () => {
   const fetchNoticeBoard = async () => {
     try {
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/notice",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notice`,
       );
 
       if (!response.ok) {

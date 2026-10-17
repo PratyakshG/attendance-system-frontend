@@ -16,7 +16,7 @@ const LeaveApplications = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/leave/get",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/leave/get`,
       );
 
       if (!response.ok) {
@@ -37,7 +37,7 @@ const LeaveApplications = () => {
   const handleComplaintStatus = async (id: string, status: string) => {
     try {
       const response = await fetch(
-        `https://rfidattendance-mu.vercel.app/api/leave/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/leave/${id}`,
         {
           method: "PUT",
           headers: {

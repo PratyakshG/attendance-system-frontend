@@ -41,7 +41,7 @@ const NoticeBoard = () => {
 
     try {
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/notice/create",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notice/create`,
         {
           method: "POST",
           headers: {
@@ -82,7 +82,7 @@ const NoticeBoard = () => {
 
     try {
       const response = await fetch(
-        `https://rfidattendance-mu.vercel.app/api/notice/${notice._id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notice/${notice._id}`,
         {
           method: "DELETE",
         },

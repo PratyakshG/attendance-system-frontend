@@ -29,7 +29,7 @@ const ComplaintsPage = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `https://rfidattendance-mu.vercel.app/api/complaint/get?userId=${user && user._id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/complaint/get?userId=${user && user._id}`,
         );
 
         if (!response.ok) {
@@ -56,7 +56,7 @@ const ComplaintsPage = () => {
 
     try {
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/complaint/submit",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/complaint/submit`,
         {
           method: "POST",
           headers: {

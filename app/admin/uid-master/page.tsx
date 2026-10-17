@@ -16,7 +16,7 @@ const UIDMaster = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://rfidattendance-mu.vercel.app/api/uid-master/delete/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/uid-master/delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -59,12 +59,7 @@ const UIDMaster = () => {
 
         {!loading && UIDs.length === 0 && <EmptyRecord />}
 
-        {!loading && (
-          <NewUID
-            fetchUID={fetchAllUID}
-            position="self-end"
-          />
-        )}
+        {!loading && <NewUID fetchUID={fetchAllUID} position="self-end" />}
 
         {!loading && UIDs && (
           <div className="flex flex-col gap-2.5 max-w-dvw overflow-auto">

@@ -12,7 +12,7 @@ const ComplaintsPage = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/complaint/get",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/complaint/get`,
       );
 
       if (!response.ok) {

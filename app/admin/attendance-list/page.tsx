@@ -23,7 +23,7 @@ const AttendanceListPage = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `https://rfidattendance-mu.vercel.app/api/attendance/view/today`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/attendance/view/today`,
           {
             cache: "no-store",
           },
