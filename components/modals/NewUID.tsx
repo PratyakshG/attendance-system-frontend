@@ -37,14 +37,14 @@ const NewUID = ({
     console.log("formData", JSON.stringify(data));
     try {
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/uid-master/add",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/uid-master/add`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       if (!response.ok) {
@@ -72,15 +72,9 @@ const NewUID = ({
 
   return (
     <div className={cn(position)}>
-      <Dialog
-        open={open}
-        onOpenChange={setOpen}
-      >
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button
-            variant="default"
-            className="w-fit self-end"
-          >
+          <Button variant="default" className="w-fit self-end">
             <Plus />
             New UID
           </Button>
@@ -91,10 +85,7 @@ const NewUID = ({
             <DialogTitle>Add New UID</DialogTitle>
           </DialogHeader>
 
-          <form
-            id="add-new-uid"
-            onSubmit={form.handleSubmit(onSubmit)}
-          >
+          <form id="add-new-uid" onSubmit={form.handleSubmit(onSubmit)}>
             <Controller
               name="uid"
               control={form.control}
@@ -124,10 +115,7 @@ const NewUID = ({
             >
               Reset
             </Button>
-            <Button
-              type="submit"
-              form="add-new-uid"
-            >
+            <Button type="submit" form="add-new-uid">
               Submit
             </Button>
           </Field>

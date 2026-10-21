@@ -7,7 +7,7 @@ export const useFetchUID = () => {
   const fetchAllUID = async () => {
     try {
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/uid-master/view/all"
+        `${process.env.NEXT_PUBLIC_API_URL}/api/uid-master/view/all`,
       );
 
       if (!response.ok) {

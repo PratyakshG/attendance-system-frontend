@@ -58,7 +58,7 @@ const UpdateNotice = ({
     setLoading(true);
     try {
       const response = await fetch(
-        `https://rfidattendance-mu.vercel.app/api/notice/${notice._id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notice/${notice._id}`,
         {
           method: "PUT",
           headers: {
@@ -98,14 +98,8 @@ const UpdateNotice = ({
   return (
     <>
       <Dialog>
-        <DialogTrigger
-          asChild
-          className={`text-sm flex items-center gap-2`}
-        >
-          <Button
-            size="sm"
-            variant={variant}
-          >
+        <DialogTrigger asChild className={`text-sm flex items-center gap-2`}>
+          <Button size="sm" variant={variant}>
             <Pencil />
             Update
           </Button>
@@ -171,10 +165,7 @@ const UpdateNotice = ({
             </FieldGroup>
           </form>
 
-          <DialogClose
-            asChild
-            className="w-fit place-self-end"
-          >
+          <DialogClose asChild className="w-fit place-self-end">
             <Button
               type="submit"
               variant="destructive"

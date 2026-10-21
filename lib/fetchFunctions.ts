@@ -1,7 +1,7 @@
 export const fetchAllEmployees = async () => {
   try {
     const response = await fetch(
-      "https://rfidattendance-mu.vercel.app/api/user/view/all",
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user/view/all`,
     );
 
     if (!response.ok) {

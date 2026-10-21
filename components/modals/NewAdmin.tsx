@@ -49,7 +49,7 @@ const NewAdmin = ({
     console.log("register-admin", data);
     try {
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/user/register-admin",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/register-admin`,
         {
           method: "POST",
           headers: {
@@ -85,15 +85,9 @@ const NewAdmin = ({
 
   return (
     <div className={cn(position)}>
-      <Dialog
-        open={open}
-        onOpenChange={setOpen}
-      >
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button
-            variant="default"
-            className="w-fit self-end"
-          >
+          <Button variant="default" className="w-fit self-end">
             <Plus />
             New Admin
           </Button>
@@ -104,10 +98,7 @@ const NewAdmin = ({
             <DialogTitle>Add New Admin</DialogTitle>
           </DialogHeader>
 
-          <form
-            id="add-employee-form"
-            onSubmit={form.handleSubmit(onSubmit)}
-          >
+          <form id="add-employee-form" onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup className="gap-4">
               <Controller
                 name="name"
@@ -206,10 +197,7 @@ const NewAdmin = ({
             >
               Reset
             </Button>
-            <Button
-              type="submit"
-              form="add-employee-form"
-            >
+            <Button type="submit" form="add-employee-form">
               Submit
             </Button>
           </Field>

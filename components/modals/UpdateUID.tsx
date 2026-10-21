@@ -56,14 +56,14 @@ const UpdateUID = ({
     setLoading(true);
     try {
       const response = await fetch(
-        `https://rfidattendance-mu.vercel.app/api/uid-master/update/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/uid-master/update/${id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
-        }
+        },
       );
 
       if (!response.ok) {
@@ -102,14 +102,8 @@ const UpdateUID = ({
           }
         }}
       >
-        <DialogTrigger
-          asChild
-          className={`text-sm flex items-center gap-2`}
-        >
-          <Button
-            size="sm"
-            variant={variant}
-          >
+        <DialogTrigger asChild className={`text-sm flex items-center gap-2`}>
+          <Button size="sm" variant={variant}>
             <Pencil />
             Update
           </Button>
@@ -169,10 +163,7 @@ const UpdateUID = ({
             </FieldGroup>
           </form>
 
-          <DialogClose
-            asChild
-            className="w-fit place-self-end"
-          >
+          <DialogClose asChild className="w-fit place-self-end">
             <Button
               type="submit"
               variant="destructive"
