@@ -47,7 +47,7 @@ const AttendanceListPage = () => {
   }, []);
 
   return (
-    <section className="space-y-2">
+    <section className="flex flex-col gap-2">
       <Header text="Attendance List" />
 
       <DropdownMenu>

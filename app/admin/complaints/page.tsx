@@ -35,7 +35,7 @@ const ComplaintsPage = () => {
   }, []);
 
   return (
-    <section className="space-y-5">
+    <section className="flex flex-col gap-2">
       <Header text="Complaints" />
 
       {loading && <TableLoadingSkeleton />}

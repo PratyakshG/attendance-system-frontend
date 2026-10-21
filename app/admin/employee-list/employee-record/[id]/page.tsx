@@ -2,6 +2,7 @@
 
 import EmployeeActions from "@/components/EmployeeActions";
 import Header from "@/components/Header";
+import { updateEmployeeType } from "@/components/modals/UpdateEmployee";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useFetchEmployees } from "@/hooks/useFetchEmployees";
 import { cn } from "@/lib/utils";
@@ -40,7 +41,7 @@ type AttendanceRecord = {
   user: Employee;
 };
 
-const EmployeeCalendar = () => {
+const EmployeeRecord = () => {
   const { id } = useParams();
   const [user, setUser] = useState<Employee>();
   const [attendance, setAttendance] = useState<AttendanceRecord[]>([]);
@@ -159,7 +160,7 @@ const EmployeeCalendar = () => {
   // const { fetchEmployees } = useFetchEmployees();
 
   return (
-    <section className="space-y-5 relative h-full flex flex-col">
+    <section className="relative h-full flex flex-col gap-2">
       <Header text={`Attendance Record`} />
 
       <div className="flex max-lg:flex-col gap-5">
@@ -179,7 +180,7 @@ const EmployeeCalendar = () => {
         {!loading && (
           <>
             {/* Employee Details */}
-            <div className="flex lg:flex-col gap-3">
+            <div className="flex lg:flex-col max-lg:gap-3">
               <Image
                 src={user?.profileImage ?? "/images/placeholder-img.jpg"}
                 alt="profile-picture"
@@ -224,7 +225,7 @@ const EmployeeCalendar = () => {
                 </h3>
 
                 <EmployeeActions
-                  employee={user as Employee}
+                  employee={user as updateEmployeeType}
                   setLoading={setLoading}
                   fetchEmployees={fetchEmployees}
                 />
@@ -368,4 +369,4 @@ const EmployeeCalendar = () => {
   );
 };
 
-export default EmployeeCalendar;
+export default EmployeeRecord;

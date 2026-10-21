@@ -114,7 +114,7 @@ const NoticeBoard = () => {
   };
 
   return (
-    <section className="space-y-5">
+    <section className="flex flex-col gap-2">
       <Header text="Notice Board" />
 
       <div className="flex flex-col gap-4 border p-5 rounded-md">

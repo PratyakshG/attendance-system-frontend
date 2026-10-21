@@ -67,7 +67,9 @@ const LeaveApplications = () => {
   }, []);
 
   return (
-    <section className="space-y-5">
+    <section
+      className="flex flex-col gap-2 max-h-dvh overflow-hidden"
+    >
       <Header text="Leave Applications" />
 
       {loading && <TableLoadingSkeleton />}
@@ -77,11 +79,11 @@ const LeaveApplications = () => {
       )}
 
       {!loading && data && (
-        <div className="grid lg:grid-cols-3 gap-5">
+        <div className="grid lg:grid-cols-3 gap-5 overflow-y-scroll pb-2">
           {data.map((item: Leave, index: number) => (
             <div
               key={index}
-              className="w-full flex flex-col items-end justify-between p-2 pt-5 bg-neutral-100 rounded-lg border border-neutral-300 shadow-md"
+              className="w-full flex flex-col items-end justify-between p-2 pt-5 bg-neutral-100 rounded-lg border border-neutral-200 shadow-md"
             >
               <ul className="flex flex-col gap-2.5 w-full *:text-sm">
                 <li className="flex flex-row-reverse items-start">

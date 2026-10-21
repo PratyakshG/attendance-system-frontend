@@ -30,12 +30,12 @@ const EmployeeListPage = () => {
   );
 
   return (
-    <section className="space-y-3">
+    <section className="flex flex-col gap-2 max-h-screen">
       <Header text="List Of Employees" />
 
       {/* <div className="max-h-[83dvh] flex flex-col gap-3 overflow-clip"> */}
-      <div className=" flex flex-col gap-3">
-        <div className="flex items-center justify-between">
+      <div className=" flex flex-col gap-2 overflow-y-hidden relative pb-2">
+        <div className="flex items-center justify-between sticky top-0">
           <DropdownMenu>
             <DropdownMenuTrigger className="h-full px-1.5 py-1.5 font-light flex items-center gap-1 bg-neutral-100 w-fit rounded-md border border-neutral-200 capitalize">
               <span className="text-sm">{filter}</span>
@@ -65,7 +65,7 @@ const EmployeeListPage = () => {
         {!loading && employees?.length === 0 && <EmptyRecord />}
 
         {!loading && (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-8 max-h-full overflow-y-scroll">
             {data?.map((employee: ServerEmployee) => (
               <EmployeeCard key={employee._id} employee={employee} />
             ))}

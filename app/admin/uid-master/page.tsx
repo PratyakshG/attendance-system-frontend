@@ -51,10 +51,10 @@ const UIDMaster = () => {
   };
 
   return (
-    <section className="space-y-3">
+    <section className="flex flex-col gap-2">
       <Header text="UID Master" />
 
-      <div className="max-h-[83dvh] overflow-hidden flex flex-col gap-2.5">
+      <div className="max-h-[83dvh] overflow-hidden flex flex-col gap-2">
         {loading && <TableLoadingSkeleton />}
 
         {!loading && UIDs.length === 0 && <EmptyRecord />}

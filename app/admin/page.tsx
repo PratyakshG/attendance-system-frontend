@@ -8,7 +8,7 @@ export default async function Home() {
   const user = await getCurrentUser();
 
   return (
-    <section className="space-y-5 relative h-full flex flex-col">
+    <section className="relative h-full flex flex-col gap-2">
       <Header user={user} />
 
       <Suspense fallback={<DashboardLoadingSkeleton />}>
