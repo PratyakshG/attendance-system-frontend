@@ -26,12 +26,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-type updateEmployeeType = Employee & {
-  password?: string;
+export type updateEmployeeType = Employee & {
+  password: string;
 };
 
 const UpdateEmployee = ({
@@ -44,6 +45,8 @@ const UpdateEmployee = ({
   fetchEmployees: () => void;
 }) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof employeeFormSchema>>({
     resolver: zodResolver(employeeFormSchema),
@@ -54,13 +57,13 @@ const UpdateEmployee = ({
       role: employee.role,
       address: employee.address,
       phoneNumber: employee.phoneNumber?.toString() ?? "",
-      password: employee.password,
       profileImage: undefined,
     },
   });
 
   const onSubmit = async (data: z.infer<typeof employeeFormSchema>) => {
     try {
+      setLoading(true);
       const formData = new FormData();
 
       Object.entries(data).forEach(([key, value]) => {
@@ -85,22 +88,21 @@ const UpdateEmployee = ({
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      form.reset(data);
-      toast("You submitted the following values:", {
-        description: (
-          <pre className="mt-2 w-[320px] overflow-x-auto rounded-md p-4 text-primary">
-            <code>
-              {JSON.stringify({ ...data, password: "******" }, null, 2)}
-            </code>
-          </pre>
-        ),
-        position: "top-right",
-      });
+      if (response.ok) {
+        form.reset(data);
 
-      router.refresh();
-      fetchEmployees();
+        toast(`The details of ${data.name} have been updated`, {
+          position: "top-right",
+        });
+
+        fetchEmployees();
+        router.refresh();
+        setOpen(false);
+      }
     } catch (error) {
       console.error("Error fetching next employee ID:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,7 +112,13 @@ const UpdateEmployee = ({
 
   return (
     <div className={cn(position)}>
-      <Dialog>
+      <Dialog
+        open={open}
+        onOpenChange={() => {
+          setOpen(!open);
+        }}
+        modal
+      >
         <DialogTrigger asChild>
           <Button className="w-full">
             <Pencil size={16} />
@@ -278,28 +286,6 @@ const UpdateEmployee = ({
                       </Field>
                     )}
                   />
-
-                  <Controller
-                    name="password"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="update-employee-password">
-                          Password
-                        </FieldLabel>
-                        <Input
-                          {...field}
-                          id="update-employee-password"
-                          aria-invalid={fieldState.invalid}
-                          placeholder="Enter Password"
-                          autoComplete="off"
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
                 </Field>
 
                 <Controller
@@ -336,8 +322,12 @@ const UpdateEmployee = ({
           </div>
 
           <Field orientation="horizontal">
-            <Button type="submit" form="update-employee-form">
-              Update Details
+            <Button
+              type="submit"
+              form="update-employee-form"
+              className={cn(loading && "opacity-60 cursor-not-allowed")}
+            >
+              {loading ? "Please Wait" : "Update Details"}
             </Button>
           </Field>
         </DialogContent>

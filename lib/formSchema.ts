@@ -22,11 +22,6 @@ export const employeeFormSchema = z.object({
     })
     .min(10, "Address must be at least 10 characters.")
     .max(100, "Address must be at most 100 characters."),
-  password: z
-    .string({
-      error: "Invalid Password",
-    })
-    .max(16, "Address must be at most 16 characters."),
   phoneNumber: z
     .string({
       error: "Expected digits only",
@@ -38,7 +33,16 @@ export const employeeFormSchema = z.object({
       error: "Input must be an image.",
     })
     .mime(["image/jpeg", "image/png", "image/webp"])
-    .max(5 * 1024 * 1024),
+    .max(5 * 1024 * 1024)
+    .optional(),
+});
+
+export const newEmployeeFormSchema = employeeFormSchema.extend({
+  password: z
+    .string({
+      error: "Invalid Password",
+    })
+    .max(16, "Password must be at most 16 characters."),
 });
 
 export const adminFormSchema = z.object({

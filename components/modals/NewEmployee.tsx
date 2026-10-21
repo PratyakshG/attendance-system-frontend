@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { employeeFormSchema } from "@/lib/formSchema";
+import { newEmployeeFormSchema } from "@/lib/formSchema";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
@@ -53,7 +53,7 @@ const NewEmployee = ({
   const fetchNextEmployeeId = async () => {
     try {
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/user/next-employee-id",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/next-employee-id`,
       );
       const data = await response.json();
       if (data.success) {
@@ -67,7 +67,7 @@ const NewEmployee = ({
   const fetchAvailableUID = async () => {
     try {
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/uid-master/view/available",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/uid-master/view/available`,
       );
       const data = await response.json();
       if (data.success) {
@@ -78,8 +78,8 @@ const NewEmployee = ({
     }
   };
 
-  const form = useForm<z.infer<typeof employeeFormSchema>>({
-    resolver: zodResolver(employeeFormSchema),
+  const form = useForm<z.infer<typeof newEmployeeFormSchema>>({
+    resolver: zodResolver(newEmployeeFormSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -92,7 +92,7 @@ const NewEmployee = ({
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof employeeFormSchema>) => {
+  const onSubmit = async (data: z.infer<typeof newEmployeeFormSchema>) => {
     try {
       const formData = new FormData();
 
@@ -109,7 +109,7 @@ const NewEmployee = ({
       }
 
       const response = await fetch(
-        "https://rfidattendance-mu.vercel.app/api/user/register",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/register`,
         {
           method: "POST",
           body: formData,
